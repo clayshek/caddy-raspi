@@ -1,0 +1,26 @@
+hostname:80
+root /var/www/caddy
+gzip
+templates
+markdown
+
+# Enable access logging and set max size before rollover to 10 MB
+log {
+rotate_size 10
+}
+
+# Provide custom URL that returns status 405 "Method not allowed".
+# Then we can conditionally rewrite paths to this URL.
+status 405 /forbidden
+
+# All URLs are only allowed to GET.
+rewrite {
+  if {method} not GET
+  to /forbidden
+}
+
+# Enable GIT site content
+git github.com/user/repo
+
+# Enable Prometheus metrics
+prometheus
